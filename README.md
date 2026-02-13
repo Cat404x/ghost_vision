@@ -1,58 +1,95 @@
-# Project Overview
+# Ghost Vision ◈
 
-## Ghost Vision
+**Deterministic Username Surface Validator**
 
-Ghost Vision is an advanced image processing application that leverages deep learning models to detect and classify atmospheric phenomena.
+Ghost Vision is a tool designed with a strict Ruby and Rust hybrid architecture. It validates the presence of usernames on various platforms by evaluating HTTP status codes only, ensuring accuracy and determinism.
 
-### Architecture
+---
 
-The architecture consists of the following layers:
+## Architecture Overview
 
-- **Data Ingestion**: Collects and preprocesses images from various sources.
-- **Model Training**: Utilizes TensorFlow/Keras for training neural networks.
-- **Inference Service**: A REST API built with Flask to serve predictions.
-- **Frontend Dashboard**: A web interface for users to interact with the application and visualize results.
+### Ruby CLI Orchestrator (`ghost_vision.rb`):
+- Accepts a username as a command-line argument.
+- Responsible for invoking the Rust engine using Open3.
+- Parses JSON responses returned by the Rust engine.
+- Displays results in a formatted output.
 
-### Requirements
+### Rust Deterministic HTTP Engine (`engine/src/main.rs`):
+- Accepts platform, username, and URL as CLI arguments.
+- Makes HTTP GET requests and evaluates HTTP response status codes.
+- Produces JSON responses strictly adhering to the contract.
+- Does not parse HTML or perform regex-based detections.
 
-- Python >= 3.8
-- Flask >= 2.0
-- TensorFlow >= 2.4
-- NumPy >= 1.19
-- OpenCV >= 4.5
+---
 
-### Dependencies
+## Output Example
 
-Install the required Python packages using pip:
-
-```bash
-pip install -r requirements.txt
+```
+GitHub      ✓ CONFIRMED      (200)
+Instagram   ✗ NOT FOUND      (404)
+Reddit      ! RATE LIMITED   (429)
 ```
 
-### Usage
+---
 
-1. Clone the repository:
+## JSON Contract
+
+The Rust engine outputs JSON strictly in the following format:
+
+```
+{
+  "platform": "GitHub",
+  "state": "confirmed",
+  "http_status": 200
+}
+```
+
+### Allowed States:
+- confirmed
+- not_found
+- rate_limited
+- blocked
+- redirected
+- inconclusive
+- error
+
+---
+
+## Dependencies and Requirements
+
+### Ruby Requirements
+- `json`
+- `open3`
+
+### Rust Requirements
+- `reqwest = "0.11"`
+- `serde = "1.0"`
+- `serde_json = "1.0"`
+
+---
+
+## Usage
+
+1. Compile the Rust engine:
    ```bash
-   git clone https://github.com/Cat404x/ghost_vision.git
-   cd ghost_vision
+   cd engine
+   cargo build --release
    ```
-2. Install the dependencies:
+
+2. Run the Ruby script, providing a username as input:
    ```bash
-   pip install -r requirements.txt
+   ruby ghost_vision.rb <username>
    ```
-3. Run the Flask application:
-   ```bash
-   python app.py
-   ```
-4. Access the dashboard at `http://localhost:5000`.
 
-### License
+---
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Constraints
 
-### Acknowledgements
+- Ruby is not allowed to perform HTTP requests or parsing logic.
+- Rust is forbidden from inspecting HTML content, regex matching, or string inference.
 
-- TensorFlow Team
-- Flask Documentation
+---
+
+**Accuracy > Hype**
 
 ---
