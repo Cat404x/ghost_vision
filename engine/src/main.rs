@@ -30,7 +30,7 @@ fn main() {
     }
 
     let platform = &args[1];
-    let _username = &args[2];
+    let _username = &args[2]; // Accepted per specification but not currently used
     let url = &args[3];
 
     let response = match reqwest::blocking::get(url) {
