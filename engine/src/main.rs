@@ -34,6 +34,7 @@ fn main() {
     }
 
     let platform = &args[1];
+    // Username is passed by the CLI but not used here since the URL is already constructed
     let _username = &args[2];
     let url = &args[3];
 
