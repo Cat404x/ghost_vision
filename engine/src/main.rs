@@ -51,5 +51,5 @@ fn main() {
         }
     };
     
-    println!("{}", serde_json::to_string(&output).unwrap());
+    println!("{}", serde_json::to_string(&output).expect("Failed to serialize output to JSON"));
 }
