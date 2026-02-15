@@ -1,0 +1,33 @@
+# Rust build artifacts
+engine/target/
+**/target/
+
+# Rust debug/release builds
+debug/
+release/
+
+# Cargo lock file for libraries (keep for binaries)
+# Cargo.lock is included for binary projects
+
+# Ruby
+*.gem
+*.rbc
+/.config
+/coverage/
+/InstalledFiles
+/pkg/
+/spec/reports/
+/spec/examples.txt
+/test/tmp/
+/test/version_tmp/
+/tmp/
+
+# macOS
+.DS_Store
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/

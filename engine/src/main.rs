@@ -1,33 +1,55 @@
 use reqwest;
-use serde::{Deserialize, Serialize};
+use serde::{Serialize};
+use std::env;
 
-#[derive(Serialize, Deserialize, Debug)]
-struct ApiResponse {
-    status: u16,
+#[derive(Serialize)]
+struct Output {
+    platform: String,
+    state: String,
+    http_status: u16,
 }
 
-fn map_state(status: u16) -> &'static str {
+fn map_state(status: u16) -> String {
     match status {
-        200 => "confirmed",
-        404 => "not_found",
-        429 => "rate_limited",
-        403 => "blocked",
-        300..=399 => "redirected",
-        500..=599 => "inconclusive",
-        _ => "inconclusive",
+        200 => "confirmed".to_string(),
+        404 => "not_found".to_string(),
+        429 => "rate_limited".to_string(),
+        403 => "blocked".to_string(),
+        300..=399 => "redirected".to_string(),
+        500..=599 => "inconclusive".to_string(),
+        _ => "inconclusive".to_string(),
     }
 }
 
 fn main() {
-    let url = "http://example.com/api/status";
-    match reqwest::blocking::get(url) {
+    let args: Vec<String> = env::args().collect();
+    
+    if args.len() != 4 {
+        eprintln!("Usage: {} <platform> <username> <url>", args[0]);
+        std::process::exit(1);
+    }
+    
+    let platform = &args[1];
+    let _username = &args[2];
+    let url = &args[3];
+    
+    let output = match reqwest::blocking::get(url) {
         Ok(response) => {
             let status = response.status().as_u16();
-            let state_message = map_state(status);
-            println!("Status: {} - {}", status, state_message);
+            Output {
+                platform: platform.to_string(),
+                state: map_state(status),
+                http_status: status,
+            }
         }
         Err(_) => {
-            println!("Error: network error");
+            Output {
+                platform: platform.to_string(),
+                state: "error".to_string(),
+                http_status: 0,
+            }
         }
-    }
+    };
+    
+    println!("{}", serde_json::to_string(&output).expect("Failed to serialize output to JSON"));
 }
