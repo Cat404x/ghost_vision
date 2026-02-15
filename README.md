@@ -90,6 +90,12 @@ The Rust engine outputs JSON strictly in the following format:
 
 ---
 
-**Accuracy > Hype**
+---
+
+## Philosophy
+
+- **Accuracy > Hype**
+- **Structure > Guessing**
+- **State Modeling > Pattern Matching**
 
 ---
