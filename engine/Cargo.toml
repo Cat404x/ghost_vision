@@ -1,4 +1,9 @@
+[package]
+name = "username_engine"
+version = "0.1.0"
+edition = "2021"
+
 [dependencies]
-reqwest = "0.11"
-serde = "1.0"
+reqwest = { version = "0.11", features = ["blocking"] }
+serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
