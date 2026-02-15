@@ -90,6 +90,12 @@ The Rust engine outputs JSON strictly in the following format:
 
 ---
 
-**Accuracy > Hype**
+## Philosophy
+
+**Accuracy > Hype**  
+**Structure > Guessing**  
+**State Modeling > Pattern Matching**
+
+Ghost Vision prioritizes deterministic state evaluation over heuristic pattern matching. By strictly evaluating HTTP status codes, we ensure that results are reproducible and reliable, avoiding false positives that arise from content scraping or regex-based detection.
 
 ---
